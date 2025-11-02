@@ -1,0 +1,308 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
+<p style="color:black; font-size:25px;">
+Problem Set 2
+</p>
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+
+#Question 1
+
+1.Compute the population mean of S. Compute the variance of S. Plot a histogram
+of S. Round your answers to three decimal places. No need to explain how you did it.
+```{r}
+spending_data <- read.csv("customer_spending.csv")
+
+spending_data_mean <- round(mean(spending_data$s), 3)
+spending_data_var <- round(mean((spending_data$s - spending_data_mean)^2), 3)
+
+cat("The population mean of S is: ", spending_data_mean, "\n")
+cat("The variance of S is: ", spending_data_var, "\n")
+
+hist(spending_data$s)
+
+```
+
+2. Compute the sample mean for the sample containing the 10 first observations in the
+dataset. Note that, since the order of the customers in the dataset is random, this is equivalent
+to drawing a random sample of 10 observations from the population. Do the same for the first
+25 and the first 100 observations. Which sample mean is closer to the population mean in part
+1? Why? Round your answers to three decimal places.
+```{r}
+#sd --> spending data
+
+#Sample 1 - 10 obs.
+sd_sample1 <- head(spending_data$s, 10)
+sd_sample1_mean <- round(mean(sd_sample1), 3)
+cat("Sample mean containing first 10 observations: ", sd_sample1_mean, "\n")
+
+#Sample 2 - 25 obs.
+sd_sample2 <- head(spending_data$s, 25)
+sd_sample2_mean <- round(mean(sd_sample2), 3)
+cat("Sample mean containing first 25 observations: ", sd_sample2_mean, "\n")
+
+#Sample 3 - 100 obs.
+sd_sample3 <- head(spending_data$s, 100)
+sd_sample3_mean <- round(mean(sd_sample3), 3)
+cat("Sample mean containing first 100 observations: ", sd_sample3_mean, "\n\n")
+
+
+#Comparing sample means to pop. mean
+cat("Difference between pop. mean and sample mean of each sample: \n",
+    "Sample 1: ", spending_data_mean - sd_sample1_mean, "\n",
+    "Sample 2: ", spending_data_mean - sd_sample2_mean, "\n",
+    "Sample 3: ", spending_data_mean - sd_sample3_mean, "\n",
+    
+    "\n", "Sample 3 (100 obs.) is the closest to the population mean in part 1 because according to the Law of Large Numbers, the higher number of observations a sample has, the closer the sample mean will be to the population mean.")
+
+
+```
+
+3. In this part, we will provide some evidence in favor of the Central Limit Theorem.
+Recall that, in lecture, we said that if we drew a large number of random samples from the
+population and computed the sample mean for each of these samples, the probability distribu-
+tion of this sample mean could be approximated by a normal distribution with mean μS and
+variance σ2S /n for a large enough sample size n (sample size refers to the number of observations
+in each random sample). Answer the questions below:
+
+a) Draw 500 random samples of 2 observations from the dataset and compute the sample
+mean for each of these 500 samples (no need to report each of these separately!). Report
+the average sample mean across the 500 samples and plot the histogram of the sample
+means. Round your numeric answer to three decimal places.
+```{r}
+set.seed(123)
+
+sample_means1 <- replicate(500, mean(sample(spending_data$s, size = 2, replace = TRUE)))
+avg_sample_mean1 <- mean(sample_means1)
+
+cat("Average sample mean: ", avg_sample_mean1)
+
+hist(sample_means1)
+
+```
+
+b) Draw 500 random samples of 500 observations from the dataset and compute the sample
+mean for each of these 500 samples (no need to report each of these separately!). Report
+the average sample mean across the 500 samples and plot the histogram of the sample
+means. Round your numeric answer to three decimal places.
+```{r}
+sample_means2 <- replicate(500, mean(sample(spending_data$s, size = 500, replace = TRUE)))
+avg_sample_mean2 <- mean(sample_means2)
+
+cat("Average sample mean: ", avg_sample_mean2)
+
+hist(sample_means2)
+```
+
+c) Does the histogram in (a) look like a normal distribution? Does the histogram in (b) look
+like a normal distribution? Why?
+```{r}
+cat("The histogram in (a) does not look like a normal distribution, because it does not outline a bell shape and is not symmetric. On the other hand, the histogram in b does look like a normal distribution because it does outline a bell shape. According to the Central Limit Theorem, a sample size of at least 30 observations results in a roughly normal distribution, and since (a) had n = 2 < 30, and (b) had n = 500 > 30, the distribution of (a) is not approx. normal while the distribution in (b) is.")
+```
+
+#Question 2
+
+```{r}
+df <- read.csv("acs_nj.csv")
+```
+
+
+1. What is the percentage of households whose head has a bachelor’s degree? Con-
+ditional on having positive, non-missing income (df$income > 0 & !is.na(df$income)), do
+heads of households with a bachelor’s degree have higher household income income on average
+than those without? No need to do any hypothesis testing and no need to explain the numbers
+here. Round your answers to three decimal places.
+```{r}
+mod_data <- df %>%
+  filter(df$income > 0 & !is.na(df$income))
+
+#finds percentage of bachelors 
+percentage <- nrow(mod_data %>% filter(bachelor == 1)) / nrow(mod_data)
+
+cat("Percentage of households whose head has a beachelor's degree, Conditional on having positive, non-missing income: ", round(percentage, 3), "\n\n")
+
+
+bachelors <- mod_data %>% 
+  filter(bachelor == 1)
+
+
+a <- mean(bachelors$income)
+b <- mean(mod_data$income)
+
+cat("Average household income (w/ bachelor's degree): ", a, "\n",
+    "Average household income (w/ or w/o bachelor's degree): ", b, "\n\n",
+    "Heads of households with a bachelor's degree do have higher household income on average than those without.")
+```
+
+2. Create a new variable, named wage hourly, that is equal to the hourly wage of the
+head of the household (in dollars per hour). Plot a histogram of this variable (for this histogram
+only, limit the sample to individuals with hourly wages of $300/hour or less, this improves the
+visualization by excluding outliers in the plot). Compute the sample mean of wage hourly and
+its sample variance. Round your answers to three decimal places.
+```{r}
+mod_data <- mod_data %>%
+  mutate(wage_hourly = (wage/52)/hours_worked)
+
+s <- mod_data %>% filter(wage_hourly <= 300)
+hw <- s$wage_hourly
+
+hist(hw)
+
+hw_mean <- round(mean(hw), 3)
+hw_variance <- round(var(hw), 3)
+
+cat("Sample mean: ", hw_mean, "\n",
+    "Sample variance: ", hw_variance)
+
+hw <- mod_data$wage_hourly
+```
+
+3. Can you reject the null hypothesis that the mean hourly wage in your sample is
+equal to $46/hour at the 5% level of statistical significance? And at the 1% level? And at the
+10% level? Make sure to define your null and alternative hypotheses.
+```{r}
+# Ho: μₕ = 46
+# Ha: μₕ != 46
+
+#5% Level
+t.test(x = hw, mu = 46, conf.level = 0.95)
+
+#1% Level - p-value=0.04351 > .01
+#10% Level - p-value=0.04351 < .10
+
+cat("5% level: p-value(0.04351) < alpha(0.05), so with 95% confidence we reject the null hypotheses, that the population mean for hourly wage is $46/hour\n",
+    "1% level: p-value(0.04351) > alpha(0.01), so with 99% confidence we fail to reject the null hypotheses, that the population mean for hourly wage is $46/hour\n",
+    "10% level: p-value(0.04351) < alpha(0.10), so with 90% confidence we reject the null hypotheses, that the population mean for hourly wage is $46/hour\n")
+```
+
+4. Can you reject the null hypothesis that the average individual in the sample makes
+$46/hour against the alternative hypothesis that the average individual makes more than that
+at the 5% significance level? And at the 10% significance level?
+```{r}
+# Ho: μₕ = 46
+# Ha: μₕ > 46
+
+#5% sig. level
+t.test(x = hw, alternative = "greater", mu = 46, conf.level = 0.95)
+
+cat("5% sig. level: \np-value (0.02176) < alpha (0.05), so with 95% confidence we reject the null hypothesis that the average individual makes $46/hour against the alternate hypothesis that the average individual makes more than that.\n\n",
+    
+    "10% sig. level: \np-value (0.02176) < alpha (0.10), so with 90% confidence we reject the null hypothesis that the average individual makes $46/hour against the alternate hypothesis that the average individual makes more than that.")
+```
+
+5. Only for this part, suppose that we only had the data for New Jersey individuals
+with a person identifier satisfying the condition pid < 5000 (assume that the pid number is
+randomly assigned, so this is a random subsample). Can you reject the null hypothesis in
+the previous part (against the same one-sided alternative hypothesis) at the 5% significance
+level? And at the 10% significance level? Explain why your answer is similar or different to
+the previous part.
+```{r}
+subset <- mod_data %>% filter(pid < 5000)
+subset_hw <- subset$wage_hourly
+
+#Ho: μₕ = 46
+#Ha: μₕ > 46
+
+t.test(x = subset_hw, alternative = "greater", mu = 46, conf.level = 0.95)
+
+cat("p-value (0.117) > alpha (0.05), so with 95% confidence we fail to reject the null hypothesis that the average individual makes $46/hour against the alternate hypothesis that the average individual makes more than that.\n\n")
+
+cat("The results could be different (we failed to reject here, but we rejected in the previous problem) because this sample has a smaller number of observations (n) which leads to a larger standard error, meaning a smaller |t| and larger p, so less power to detect the same effect.")
+```
+
+6. What is the difference in the mean hourly wages between household heads with and
+without a bachelor’s degree? Is it significantly different from zero at the 5% significance level?
+Round your answer to two decimal places.
+```{r}
+with_b <- mod_data %>% 
+  filter(bachelor == 1)
+
+without_b <- mod_data %>%
+  filter(bachelor == 0)
+
+hw_with_b <- with_b$wage_hourly
+hw_without_b <- without_b$wage_hourly
+
+diff <- round(mean(hw_with_b)-mean(hw_without_b), 3)
+cat("Difference in the mean hourly wages between household heads w/ and w/o bachelor's degree (in sample): ", diff, "\n")
+
+#Setting up statistical test
+
+#μₕ represents pop. mean income with household heads w/ bach. degree while  μₕ represents pop. mean income of those without
+#Ho: μₕ - μₕₙ = 0
+#Ha: μₕ - μₕₙ != 0
+
+t.test(x = hw_with_b, y = hw_without_b, mu = 0, conf.level = 0.95)
+
+cat("\nWith 95% confidence we can reject the null hypothesis - the difference in the mean hourly wage of household heads with a bachelor's degree and the hourly wage of those without is significantly different from zero because:  p-value (2.2e-16) < alpha (0.05)")
+
+```
+
+7. For this final question, on top of the previous sample restriction (positive, non-
+missing income households), you will restrict the sample to household heads who are renters
+(df$renter == 1). Next, create a new variable, named rent to income ratio, that is equal
+to the percentage of annual income that a renter household spends on rent during a year
+```{r}
+mod_data2 <- mod_data %>%
+  filter(renter == 1) %>%
+  mutate(rent_to_income_ratio = (rent*12)/income)
+
+rtir <- mod_data2$rent_to_income_ratio
+```
+
+a) Compute the sample correlation between rent and bachelor, and the correlation
+between rent to income ratio and bachelor. Interpret, in your own words, the meaning of
+these two correlations.
+```{r}
+cor(mod_data2$rent, mod_data2$bachelor)
+cor(rtir, mod_data2$bachelor)
+
+cat("\n1.  There is a weak-moderate positive linear correlation between rent and bachelor's degree status.
+2.  There is a very weak negative linear correlation between rent to income ratio and bachelor's degree status.")
+```
+
+b) Compute the 95% confidence interval for the sample mean of rent to income ratio
+for household heads with a bachelor’s degree. Using this confidence interval, can you reject the
+null hypothesis that the average rent to income ratio for household heads with a bachelor’s
+degree is 30 percent?
+```{r}
+mod_data2_with_b <- mod_data2 %>%
+  filter(bachelor == 1)
+
+rtir_with_b <- mod_data2_with_b$rent_to_income_ratio
+
+#t.test() finds the 95% confidence interval
+
+#Ho: μᵣ = 0.30
+#Ha: μᵣ != 0.30
+
+t.test(x = rtir_with_b, mu = 0.3, conf.level = 0.95)
+
+cat("\n95% CI: (0.284, 0.372)\n\nSince the 0.3 lies within the confidence interval, we fail to reject the null hypothesis that the average rent to income ratio for household heads with a bachelor's degree is 30 percent.")
+```
+
+c) Can you reject the null hypothesis that the average rent to income ratio for
+household heads without a bachelor’s degree is exactly 30 percent, against the alternative hy-
+pothesis that they pay more than 30 percent of their income towards rent?
+```{r}
+mod_data2_without_b <- mod_data2 %>%
+  filter(bachelor == 0)
+
+rtir_without_b <- mod_data2_without_b$rent_to_income_ratio
+
+#Ho: μᵣ = 0.30
+#Ha: μᵣ > 0.30
+
+t.test(x = rtir_without_b, mu = 0.3, conf.level = 0.95, alternative = "greater")
+
+cat("\nWe reject the null hypothesis that the average rent to income ratio for household heads without a bachelor's degree is exactly 30 percent, against the alternative that they pay more than 30 percent since:  p-value (1.294e-12) < alpha (0.05)")
+```
+
+

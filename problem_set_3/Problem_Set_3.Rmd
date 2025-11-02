@@ -1,0 +1,337 @@
+---
+title: "Problem Set 3"
+author: "Ayush Pundyavana"
+output: 
+  pdf_document:
+    latex_engine: xelatex
+    keep_tex: true
+fontsize: 11pt
+geometry: margin=1in
+header-includes:
+  - \usepackage{fancyvrb}
+  - \usepackage{fvextra}
+  - \fvset{breaklines=true, breakanywhere=true, fontsize=\small, frame=single}
+  - \usepackage{amsmath}
+  - \usepackage{amssymb}
+  - \usepackage{fontspec}
+  - \setmainfont{Times New Roman}
+---
+
+
+```{r}
+knitr::opts_chunk$set(
+echo = TRUE,
+results = 'markup',
+tidy = TRUE,
+comment = NA,
+width = 60, # wrap R output lines
+max.print = 100 # limit huge outputs
+)
+options(width = 60) # ensures printed output wraps too
+```
+
+
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+
+## Question 1
+
+```{r}
+data1.1 <- read.csv("grades_and_temps.csv")
+```
+
+
+
+
+#1.1 
+Construct a variable that you will use throughout this question: the average yearly temperature in a given year, expressed in Farenheit degrees. Call it avg temp f. Generate a scatter plot with the average yearly temperature (avg temp f) on the x-axis and the average math score (math score) on the y-axis. Using visual inspection, do these variables seem to be positively correlated, negatively correlated, or not correlated at all?
+```{r}
+# Adding variable to df
+data1.2 <- data1.1 %>% mutate(avg_temp_f = (avg_temp * 9/5) + 32)
+
+#Getting rid of missing values
+colSums(is.na(data1.2))                     #Finding where missing values lie
+data1.2 %>% filter(!complete.cases(.))      #show observations w/ missing values
+
+#Get rid of rows missing avg temp
+data1.3 <- data1.2 %>% filter(!is.na(data1.2$avg_temp))
+prev_rows <- nrow(data1.2)
+curr_rows <- nrow(data1.3)
+
+cat("\n\nNumber of rows excluded (due to missing values): ", prev_rows-curr_rows)
+```
+
+```{r}
+#Display the scatterplot
+ggplot(data = data1.3, aes(x = avg_temp_f, y = math_score)) +
+  geom_point(color = "blue", size = 2) +
+  labs(
+    title = "Math scores based on Average Yearly Temperature",
+    x = "Average Yearly Temperature",
+    y = "Math scores"
+  )
+
+#Conclusion
+cat('Using visual inspection of the scatterplot, there is a roughly downward-sloping trend,\nmeaning variables seem to be negatively correlated.')
+```
+
+
+
+
+#1.2
+Regress the average math score on the average yearly temperature. Report the estimated intercept (ˆα) and the estimated slope ( ˆβ). Interpret both coefficients. Does it make sense to interpret ˆα?
+```{r}
+reg_model <- lm(math_score ~ avg_temp_f, data = data1.3)
+summary(reg_model)
+
+alpha_hat <- summary(reg_model)$coefficients[1]
+beta_hat <- summary(reg_model)$coefficients[2]
+
+alpha_hat_SE <- round(summary(reg_model)$coefficients[3], 3)
+beta_hat_SE <- round(summary(reg_model)$coefficients[4], 3)
+
+
+cat("----------------------------------------------------------------\nAlpha hat:", alpha_hat," --> According to the regression model, this is the math score when \ntemperature is 0, or in other words, the y-intercept.\n 
+Beta hat:", beta_hat," --> According to the model, for every 1 degree Fahrenheit increase in \ntemperature, the math score decreases by this much\n
+It does not make sense to interpret alpha hat because the temperature of 0 is outside of the \nrange of observed temperatures.")
+```
+
+
+
+
+#1.3
+Based on visual inspection of the plot in question 1, do you think the errors are homoskedastic or heteroskedastic? Why? Compare the standard errors for ˆα and ˆβ both under the homoskedasticity and the heteroskedasticty asssumptions.
+```{r}
+cat("I think the errors are heteroskedastic because from the visualization, it seems that the \nvariance of the error seems to change (increase) as x increases\n\n")
+
+#install.packages("sandwich")
+library(sandwich)
+#install.packages("lmtest")
+library(lmtest)
+
+vcov <- vcovHC(reg_model, type = "HC3")
+robust_se <- sqrt(diag(vcov))
+robust_se
+
+coeftest(reg_model, vcov. = vcov)
+
+cat("\n\nErrors under homoskedastic assumptions- α hat:", round(alpha_hat_SE,3),  " beta hat:", round(beta_hat_SE, 3),
+"\nErrors under heteroskedastic assumptions- alpha hat:", round(robust_se[1],3), " beta hat:", round(robust_se[2],3),
+"\n\nThe SE's of alpha hat and beta hat are both larger under heteroskedastic assumptions-\n alpha hat:", robust_se[1]-alpha_hat_SE, "greater    beta hat:", robust_se[2]-beta_hat_SE, "greater")
+```
+
+
+
+
+#1.4 
+Using the heteroskedasticity-robust standard errors: (a) test the null hypothesis that
+H0 : β = 0 at the 5% significance level, and (b) test the null hypothesis that H0 : β = −1.85
+at both the 5% and the 10% significance levels. Write out the t-statistic formulas to perform
+these two-sided tests.
+```{r}
+#Part A
+
+#H0 : β = 0  (5% significance level)
+cat("Formula for t-stat: ", "t = (Betahat - Beta_null) / SE(Betahat)\n\n")
+
+t_statA <- (beta_hat - 0) / robust_se[2] #Finding t-statistic
+df <- nrow(data1.3) - length(coef(reg_model))
+p_valueA <- 2*pt(-abs(t_statA), df = df)
+
+cat("Since the p-value (", p_valueA, ") is less than alpha (0.05), we reject the null hypothesis \nthat the true coefficient is 0 with 95% confidence.")
+```
+
+```{r}
+#Part B
+
+#H0: Beta = −1.85  (5%, 10% significance level)
+cat("Formula for t-stat: ", "t = (Betahat - Beta_null) / SE(Betahat)\n\n")
+
+t_statB <- (beta_hat + (1.85)) / robust_se[2]
+p_valueB <- 2*pt(-abs(t_statB), df = df)
+
+
+cat("\n05% significance level:  Since the p-value (", round(p_valueB, 3), ") is greater than alpha (0.05), we fail \nto reject the null hypothesis that the true coefficient is -1.85 with 95% confidence",
+    "\n\n10% significance level:  Since the p-value (", round(p_valueB,3), ") is less than alpha (0.10), we reject \nthe null hypothesis that the true coefficient \nis -1.85 with 90% confidence")
+```
+
+
+
+
+#1.5
+Suppose the OECD is seriously considering implementing stricter climate change
+agreements that are projected to decrease global average yearly temperatures by 2.35◦F. Using
+the econometric model in Equation 1 and your estimated coefficients, compute by how much
+you would expect the average math score to change as a result of this projected temperature
+decrease.
+```{r}
+change <- beta_hat * -2.35
+
+cat("Using the econometric model in Equation 1 and estimated coefficients, I would expect an \nincrease in average math score by", change, "as a \nresult of the projected temperature decrease.")
+```
+
+#1.6
+Do you think your estimate ˆβ is causal (e.g., does the answer in the previous part
+make sense to you)? Explain your answer.
+```{r}
+cat("No, I don't think beta hat is not causal because there are likely omitted variables \nsuch as GDP per capita, education quality, and regional development \nthat affect both temperature and math scores.
+
+Therefore, I believe the observed relationship reflects correlation, not causation.")
+```
+
+
+
+
+
+##Question 2
+
+```{r}
+data2.1 <- read.csv("middlesex_permits.csv")
+
+head(data2.1)
+
+colSums(is.na(data2.1))
+```
+
+
+
+
+#2.1
+Estimate Equation 2. Report your estimate for ˆβ1 and its respective heteroskedasticity-
+robust standard error. Interpret the coefficient.
+```{r}
+reg_model_cc_f <- lm(construction_cost ~ fees, data = data2.1)
+vcov_cc_f <- vcovHC(reg_model_cc_f, type = "HC3")
+coeftest(reg_model_cc_f, vcov. = vcov_cc_f)
+
+robust_se_2 <- sqrt(diag(vcov_cc_f))
+
+beta1hat <- (reg_model_cc_f$coefficients[2])
+beta1hatSE <- robust_se_2[2]
+
+cat("\nBeta1 hat is estimated to be", round(beta1hat,3), "and its respective heteroskedasticity-robust \nstandard error is estimated to be", round(beta1hatSE,3),"\n
+Interpret the coefficient: For every 1 dollar increase in the total sum charged for \nthe building, the construction cost is expected to go up by\n", round(beta1hat,3), "dollars")
+```
+
+
+
+
+#2.2
+Since you took Econ 322, you suspect that Equation 2 may suffer from omitted vari-
+able bias (OVB). But you also have data on other permit characteristics, so you can investigate
+whether OVB is a concern! You start by exploring whether the number of units in the building
+can be a source of OVB. Compute the correlation between units and fees. Compute the corre-
+lation between units and construction cost. Based on these results, do you think your estimate
+of ˆβ1 is biased? If so, is it upward or downward biased? Provide an intuitive explanation.
+```{r}
+#Correlation between units and fees
+corr_u_f <- cor(data2.1$units, data2.1$fees, use = "complete")
+
+#Correlation between units and construction
+corr_u_cc <- cor(data2.1$units, data2.1$construction_cost, use = "complete")
+
+cat("Based on these results, I do think my estimate of Beta1 hat is biased since \nboth correlation between units and fees(X) (", round(corr_u_f,3), ") AND \ncorrelation between units and construction(Y) (", round(corr_u_cc,3), ") are strongly \ncorrelated. Since both correlations are positive, the \nbias must be upward biased. 
+
+Intuitive Explanation: The estimate of the coeff. on fees is upward biased because \nlarger buildings usually have more unit, which leads to both higher fees and \nhigher construction costs. Since the number of units isn't included in the model, \npart of the effect of building size is being incorrectly attributed to fees, \nmaking the estimated impact of fees on construction cost appear larger \nthan it truly is.")
+```
+
+
+
+
+#2.3
+Report the estimated ˆβ2 and ˆθ2 coefficients, along with their respective heteroskedasticity-
+robust standard errors. Interpret the coefficients. How does ˆβ2 compare with your estimate ˆβ1
+from Equation 2? Relate the answer to this question to your answer in the previous part.
+```{r}
+reg_model_cc_f_u <- lm(construction_cost ~ fees + units, data = data2.1)
+vcov_cc_f_u <- vcovHC(reg_model_cc_f_u, type = "HC3")
+coeftest(reg_model_cc_f_u, vcov. = vcov_cc_f_u)
+
+bet_hat <- reg_model_cc_f_u$coefficients[2]
+thet_hat <- reg_model_cc_f_u$coefficients[3]
+
+cat("\nBeta2 hat: For every $1 increase in fees, construction cost increases by  $", round(bet_hat,3), "
+Theta2 hat: For every increase in units in the builiding by 1, construction cost \nincreases by  $", round(thet_hat,3), "
+
+Beta2 hat is less than Beta1 hat which makes sense because as I stated in the previous \nproblem, part of the effect of the building was incorrectly being attributed \nto fees, making Beta1 hat appear larger than the true value. \nSo, now accounting number of units, the new effect of the fees charged for \nthe building (Beta2 hat) is lower, and closer to the true value population value.")
+```
+
+
+
+
+#2.4
+Note that you will need to construct two new variables from the variable municipality name:
+new brunswick is a dummy variable that takes value 1 if the permit was issued in New
+Brunswick, 0 otherwise; and edison is a dummy variable that takes value 1 if the per-
+mit was issued in Edison, 0 otherwise. Report all the estimated coefficients in this regres-
+sion, along with their heteroskedastic-robust standard errors. How does ˆβ3 compare with
+your estimate ˆβ2 from Equation 3? Do you think that your estimate of β3 is causal? Ex-
+plain.
+```{r}
+#Making necessary additions to the data
+table(data2.1$municipality_name)
+
+data2.2 <- data2.1 %>% mutate(new_brunswick = as.numeric(municipality_name=="NEW BRUNSWICK")) %>% mutate(edison = as.numeric(municipality_name=="EDISON"))
+
+head(data2.2)
+
+#Check accuracy
+nrow(data2.2[data2.2$new_brunswick==1,])
+nrow(data2.2[data2.2$edison==1,])
+```
+
+```{r}
+#Running the regression
+reg_model_cc_many <- lm(construction_cost ~ fees + units + square_feet + volume + new_brunswick + edison, data = data2.2)
+vcov_cc_many <- vcovHC(reg_model_cc_many, type = "HC3")
+coeftest(reg_model_cc_many, vcov. = vcov_cc_many)
+
+fee_coeff <- reg_model_cc_many$coefficients[2]
+uni_coeff <- reg_model_cc_many$coefficients[3]
+sqf_coeff <- reg_model_cc_many$coefficients[4]
+vol_ceoff <- reg_model_cc_many$coefficients[5]
+nb_coeff <-  reg_model_cc_many$coefficients[6]
+edi_coeff <- reg_model_cc_many$coefficients[7]
+
+robust_se_many <- sqrt(diag(vcov_cc_many))
+fee_SE <- robust_se_many[2]
+uni_SE <- robust_se_many[3]
+sqf_SE <- robust_se_many[4]
+vol_SE <- robust_se_many[5]
+nb_SE  <- robust_se_many[6]
+edi_SE <- robust_se_many[7]
+
+#Comparing
+diff <- round(bet_hat,3) - round(fee_coeff,3)
+cat("Beta3 hat is less than Beta2 hat by", diff, "which can be attributed to the inclusion of \nkappa3, upsilon3, and phi3\n\n")
+
+#Checking for causality - Beta3 hat > |1.96*SE|
+signif <- fee_coeff > abs(1.96 * round(fee_SE,3))
+
+if (signif) {
+  cat("Beta3 hat is significant because Beta3 hat > |1.96*SE|")
+} else {
+  cat("Beta3 hat is not significant because Beta3 hat < |1.96*SE|")
+  cat("\nEven though Beta3 captures a conditional relationship after controlling for size and \nmunicipality, it is not necessarily causal because unobserved \nfactors (e.g., project complexity, land cost) may still bias the estimate.")
+
+}
+```
+
+
+
+
+#2.5
+In the previous regression, (i) How do you interpret α3? Does this interpretation
+make sense? and (ii) How do you interpret the coefficient on new brunswick? Use your
+estimates to answer these questions.
+```{r}
+cat("alpha3 Interpretation:  The construction cost when fees, units, square feet, \nvolume are 0 and the permit is not issued in New Brunswick or Edison.
+\nDoes this make sense:  No, the interpretation does not make sense because at least 1 \nof these variables, such as square feet, can not realistically be zero.
+\nnew_brunswick coeff. Interpretation: When the permit is issued in New Brunswick, the \nestimated construction cost increases by  $", 4.7630e+04)
+```
+
