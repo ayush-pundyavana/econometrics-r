@@ -1,0 +1,61 @@
+title: "Problem Set 4"
+author: "Ayush Pundyavana"
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(sandwich)
+library(lmtest)
+```
+
+#Question 1
+
+```{r}
+data1.1 <- read.csv("grades_and_temps.csv")
+
+data1.2 <- data1.1 %>% mutate(gdppc1k <- round(gdppc/1000, 3))
+```
+
+
+
+
+1. 
+Generate a scatter plot with GDP per capita in thousands of dollars (gdppc1k) 
+on the x-axisand the average math score (math score) on the y-axis. Using visual 
+inspection, do these variables seem to be positively correlated, negatively 
+correlated, or not correlated at all? Does their relationship seem linear or 
+non-linear?
+```{r}
+plot(x = data1.2$gdppc1k, y = data1.2$math_score,
+     main = "GDP Per Capita based on Math Score",
+     xlab = "GDP Per Capita",
+     ylab = "Math Score",
+     col = "purple"
+)
+
+cat("Using visual inspection of the scatterplot, the relationship between GDP
+    Per Capita and Math Score seems non-linear since the rate of change in the
+    Math score as GDP Per Capita increases seems to be non-constant.")
+```
+
+
+
+
+2.
+Estimate the following two Equations:
+  
+math scorei = a + b gdppc1ki + ei (1)
+math scorei = α + β1 gdppc1ki + β2 gdppc1k2i + εi (2)
+
+Report the estimated coefficients ˆb, ˆβ1 and ˆβ2, along with their 
+heteroskedasticity-robust standard errors for each equation. Determine whether 
+the relationship between math scores and GDP per capita is linear 
+(as opposed to quadratic).
+
+```{r}
+#Linear model
+lin_model <- lm(math_score ~ gdppc1k, data = data1.2)
+vcov_m_g <- vcovHC(lin_model, type = "HC3")
+coeftest(lin_model, vcov. = vcov_m_g)
+```
+
