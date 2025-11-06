@@ -13,7 +13,7 @@ library(lmtest)
 ```{r}
 data1.1 <- read.csv("grades_and_temps.csv")
 
-data1.2 <- data1.1 %>% mutate(gdppc1k <- round(gdppc/1000, 3))
+data1.2 <- data1.1 %>% mutate(gdppc1k = round(gdppc/1000, 3))
 ```
 
 
@@ -57,5 +57,10 @@ the relationship between math scores and GDP per capita is linear
 lin_model <- lm(math_score ~ gdppc1k, data = data1.2)
 vcov_m_g <- vcovHC(lin_model, type = "HC3")
 coeftest(lin_model, vcov. = vcov_m_g)
+
+b <- lin_model$coefficients[2]
+
+
 ```
+
 
