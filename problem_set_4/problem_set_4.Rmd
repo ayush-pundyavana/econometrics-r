@@ -1,5 +1,34 @@
+---
 title: "Problem Set 4"
 author: "Ayush Pundyavana"
+output: 
+  pdf_document:
+    latex_engine: xelatex
+    keep_tex: true
+fontsize: 11pt
+geometry: margin=1in
+header-includes:
+  - \usepackage{fancyvrb}
+  - \usepackage{fvextra}
+  - \fvset{breaklines=true, breakanywhere=true, fontsize=\small, frame=single}
+  - \usepackage{amsmath}
+  - \usepackage{amssymb}
+  - \usepackage{fontspec}
+  - \setmainfont{Times New Roman}
+---
+
+
+```{r}
+knitr::opts_chunk$set(
+echo = TRUE,
+results = 'markup',
+tidy = TRUE,
+comment = NA,
+width = 60, # wrap R output lines
+max.print = 100 # limit huge outputs
+)
+options(width = 60) # ensures printed output wraps too
+```
 
 ```{r}
 library(dplyr)
@@ -27,7 +56,7 @@ correlated, or not correlated at all? Does their relationship seem linear or
 non-linear?
 ```{r}
 plot(x = data1.2$gdppc1k, y = data1.2$math_score,
-     main = "GDP Per Capita based on Math Score",
+     main = "Math Score based on GDP Per Capita ",
      xlab = "GDP Per Capita",
      ylab = "Math Score",
      col = "purple"
@@ -58,9 +87,356 @@ lin_model <- lm(math_score ~ gdppc1k, data = data1.2)
 vcov_m_g <- vcovHC(lin_model, type = "HC3")
 coeftest(lin_model, vcov. = vcov_m_g)
 
-b <- lin_model$coefficients[2]
+b_hat <- lin_model$coefficients[2]
+b_hat_SE <- sqrt(diag(vcov_m_g))[2]
 
+cat("b_hat:", b_hat, "\nb_hat SE:", b_hat_SE)
+```
+
+```{r}
+#Quadratic model
+quad_model <- lm(math_score ~ gdppc1k + I(gdppc1k*gdppc1k), data = data1.2)
+vcov_m_g_g2 <- vcovHC(quad_model, type = "HC3")
+coeftest(quad_model, vcov. = vcov_m_g_g2)
+
+beta1_hat <- lin_model$coefficients[2]
+beta1_hat_SE <- sqrt(diag(vcov_m_g))[2]
+
+beta2_hat <- lin_model$coefficients[3]
+beta2_hat_SE <- sqrt(diag(vcov_m_g))[3]
+
+cat("beta1_hat:", beta1_hat, "\nbeta1_hat SE:", beta1_hat_SE, "\n\nbeta2hat:", beta2_hat, "\nbeta2_hat SE:", beta2_hat_SE, "\n\n")
+cat("The relationship between math scores and GDP per capita is non-linear 
+because beta2hat is statistically signficant")
 
 ```
 
+
+
+
+3. Using your estimated coefficients from Equation (2) above, what is the expected
+value of the difference in math scores between a country with a GDP per capita of $5,000 and
+a country with a GDP per capita of $10,000?
+```{r}
+pred_5k <- coef(quad_model)[1] + coef(quad_model)[2]*5 + coef(quad_model)[3]*5^2
+pred_10k <- coef(quad_model)[1] + coef(quad_model)[2]*10 + coef(quad_model)[3]*10^2
+diff_pred <- pred_10k - pred_5k
+
+cat("Expected difference in math scores (10k vs 5k GDP per capita):",
+    round(diff_pred, 3))
+```
+
+
+
+
+4. Generate a scatter plot with the math score on the y-axis and the (natural) logarithm
+of the GDP per capita (in thousands of dollars) on the x-axis. Based on visual inspection, is
+the relationship between these two transformed variables linear? Do you think that a linear-
+log specification will be able to better explain the relationship between these two variables
+compared to the variables in part 1?
+```{r}
+data1.3 <- data1.2 %>% mutate(log_gdppc1k = log(gdppc1k))
+
+plot(data1.3$log_gdppc1k, data1.2$math_score,
+     main = "Math Score vs. log(GDP per capita)",
+     xlab = "log(GDP per capita in $1000s)",
+     ylab = "Math Score",
+     col = "darkgreen", pch = 19)
+
+cat("Visual inspection shows a LINEAR relatinship after taking logs, indicating 
+that the linear-log model might fit better than the raw-level model.")
+```
+
+
+
+
+
+5. 
+Estimate the following two regression equations:
+
+math scorei = θ1 + θ2 ln(gdppc1ki) + ui
+ln(math scorei) = γ1 + γ2 ln(gdppc1ki) + νi
+
+Report the estimated intercept, slope, and their respective heteroskedasticity-robust standard
+errors for each equation. How do you interpret the intercept and the slope in each equation?
+```{r}
+#Linear-log model
+linlog_model <- lm(math_score ~ log_gdppc1k, data = data1.3)
+vcov_li <- vcovHC(linlog_model, type = "HC3")
+coeftest(linlog_model, vcov. = vcov_li)
+
+#Extract individual values
+theta1_hat  <- coef(linlog_model)[1]
+theta2_hat  <- coef(linlog_model)[2]
+theta1_se   <- sqrt(diag(vcovHC(linlog_model, type = "HC3")))[1]
+theta2_se   <- sqrt(diag(vcovHC(linlog_model, type = "HC3")))[2]
+
+#Report values
+cat("theta1hat (Intercept):", theta1_hat,
+"  theta1hatSE:", theta1_se,"\n")
+cat("theta2hat (Coefficient):", theta2_hat,
+"  theta2hatSE:", theta2_se,"\n")
+
+
+#Log-log model
+data1.4 <- data1.3 %>% mutate(log_math = log(math_score))
+loglog_model <- lm(log_math ~ log_gdppc1k, data = data1.4)
+coeftest(loglog_model, vcov = vcovHC(loglog_model, type = "HC3"))
+
+#Extract individual values neatly
+gamma1_hat  <- coef(loglog_model)[1]
+gamma2_hat  <- coef(loglog_model)[2]
+gamma1_se   <- sqrt(diag(vcovHC(loglog_model, type = "HC3")))[1]
+gamma2_se   <- sqrt(diag(vcovHC(loglog_model, type = "HC3")))[2]
+
+#Report values
+cat("gamma1hat (Intercept):", gamma1_hat,
+"  gamma1hatSE:", gamma1_se,"\n")
+cat("gamma2hat (Coefficient):", gamma2_hat,
+"  gamma2hatSE:", gamma2_se,"\n")
+
+cat("\nLinear-log model Interpretations:\n\n")
+cat("In the linear-log model, the slope (beta2hat) represents the change in 
+math score for a 1% change in GDP per capita.\n\n")
+cat("In the log-log model, the slope (gamma2hat) (elasticity) shows the % change 
+in math score for a 1% change in GDP per capita.")
+
+```
+
+
+
+
+
+6. 
+Use the R-squared to determine which specification between the following pairs
+better explains the relationship between math scores and GDP per capita: 
+a) Quadratic vs Linear-log, b) Linear-log vs Log-log. Explain.
+```{r}
+#Obtaining R^2 values
+R2_lin <- summary(lin_model)$r.squared
+R2_quad <- summary(quad_model)$r.squared
+R2_linlog <- summary(linlog_model)$r.squared
+R2_loglog <- summary(loglog_model)$r.squared
+
+cat("R_squared Linear:", round(R2_lin, 3),
+"\nR_squared Quadratic:", round(R2_quad, 3),
+"\nR_squared Linear-log:", round(R2_linlog, 3),
+"\nR_squared Log-log:", round(R2_loglog, 3))
+
+cat("\n\n(a) Quadratic vs Linear-log: The model with higher R² explains more variance,
+but since they use different transformations, direct comparison must be cautious.\n\n")
+cat("(b) Linear-log vs Log-log: Both have the same dependent variable transformation,
+so the higher R² model better fits the data.")
+```
+
+
+## Question 2
+
+```{r}
+data2.1 <- read.csv("DDCG_dataset.csv")
+```
+
+
+
+
+1. 
+For the sample of countries with available data in 2005, compute the mean GDP per
+capita for those that have a democracy (demo = 1). Do the same for the sample of countries
+that do not have a democracy in 2005 (demo = 0). What is the difference? Can you reject
+the null hypothesis that the two means are equal at the 5% significance level (no regressions
+needed for this part)? Estimate a regression of GDP per capita on the democracy dummy, also
+restricted to year 2005. How do the estimated intercept and slope compare to your previous
+calculations? 
+```{r}
+# Restrict to 2005
+data2_2005 <- data2.1 %>% filter(year == 2005)
+
+#Get group means
+means <- data2_2005 %>%
+  group_by(dem) %>%
+  summarise(mean_gdp = mean(gdp_capita, na.rm = TRUE))
+
+means
+
+
+#Difference in means
+diff_means <- means$mean_gdp[means$dem == 1] - means$mean_gdp[means$dem == 0]
+cat("Difference in mean GDP per capita (democracy - non-democracy):", round(diff_means, 3), "\n")
+
+#Two-sample t-test (unequal variances)
+t_test <- t.test(gdp_capita ~ dem, data = data2_2005, var.equal = FALSE)
+t_test
+
+p_val <- t_test$p.value
+
+cat("\nInterpretation: We reject the null hypothesis that mean GDP per capita is
+equal across statuses since  p-value(", round(p_val, 3), ") is less than alpha(", 0.05, ")\n")
+```
+
+```{r}
+reg_2005 <- lm(gdp_capita ~ dem, data = data2_2005)
+coeftest(reg_2005, vcov = vcovHC(reg_2005, type = "HC3"))
+
+cat("Intercept (alpha) should equal mean(GDP | dem=0):", 
+    round(means$mean_gdp[means$dem == 0], 3), "\n")
+cat("Slope (Beta_hat) should equal difference in means:", 
+    round(means$mean_gdp[means$dem == 1] - means$mean_gdp[means$dem == 0], 3), "\n")
+```
+
+
+
+
+
+2.
+Throughout the rest of this question, we are going to focus on studying the rela-
+tionship between the natural logarithm of GDP per capita and the democracy dummy:
+
+log(gdp capita) = α + βdem + ε 
+
+Estimate the equation above. Report the estimated coefficients ˆα and ˆβ, along with their
+corresponding heteroskedasticity-robust standard errors. Interpret ˆβ. Is β statistically different
+from zero at the 5% significance level (report t-statistic and p-value)?
+```{r}
+# Add log of GDP per capita
+data2.2 <- data2.1 %>%
+  mutate(log_gdp = log(gdp_capita))
+
+model3 <- lm(log_gdp ~ dem, data = data2.2)
+vcov <- vcovHC(model3, type = "HC3")
+coeftest(model3, vcov. = vcov)
+
+# Extract estimates
+alpha_hat <- coef(model3)[1]
+beta_hat  <- coef(model3)[2]
+se_alpha  <- sqrt(diag(vcovHC(model3, type = "HC3")))[1]
+se_beta   <- sqrt(diag(vcovHC(model3, type = "HC3")))[2]
+
+t_beta <- beta_hat / se_beta
+
+cat("alpha_hat =", round(alpha_hat, 3), " (SE =", round(se_alpha, 3), ")\n",
+"Beta_hat =", round(beta_hat, 3), " (SE =", round(se_beta, 3), ", t =", round(t_beta, 3), ")\n")
+
+cat("\nInterpretation: Beta_hat represents the percentage difference in GDP per capita
+between democracies and non-democracies. If Beta_hat is statistically significant
+(|t| > 2), democracies have higher average log(GDP per capita).")
+
+```
+
+
+
+
+
+3. 
+Do you think that the equation above can suffer from omitted variable bias (OVB)?
+List two omitted variables that can potentially lead to OVB when estimating Equation (5).
+For each of them, argue whether the estimate ˆβ is upward or downward biased (i.e., would ˆβ
+go down or up, if we included the omitted variable)?
+```{r}
+cat("Possible ommitted variables are education levels (more educated populations
+--> higher GDP and higher likelihood of democracy), trade openness (trade boosts
+income and correlates with democratic institutions)")
+
+cat("\n\nIf these are ommitted, and both correlate positively with democracy and 
+GDP, then beta1hat is upward biased, meaning the democracy effect appears 
+larger than it really is.")
+```
+
+
+
+
+
+4. 
+```{r}
+model4 <- lm(log_gdp ~ dem + lp_bl + lh_bl, data = data2.2)
+coeftest(model4, vcov = vcovHC(model4, type = "HC3"))
+
+# Extract Beta_hat and SE
+beta_hat_edu <- coef(model4)["dem"]
+beta_se_edu  <- sqrt(diag(vcovHC(model4, type = "HC3")))[2]
+
+cat("With education controls:\nBeta_hat =", round(beta_hat_edu, 3),
+    "| SE =", round(beta_se_edu, 3), "\n")
+
+cat("\nIf Beta_hat decreases after adding education controls, the earlier model 
+likely overstated democracy's effect, meaning the initial estimate was upward 
+biased.")
+
+```
+
+
+
+
+
+5.
+On top of lp bl and lh bl, also add ginv and tradewb as control variables in
+Equation (5). How does ˆβ change (report the standard error as well)? Provide an intuitive
+explanation. Does this change mean that the ˆβ was upward or downward biased in part 4?
+```{r}
+model5 <- lm(log_gdp ~ dem + lp_bl + lh_bl + ginv + tradewb, data = data2.2)
+coeftest(model5, vcov = vcovHC(model5, type = "HC3"))
+
+# Extract updated Beta_hat and SE
+beta_hat_econ <- coef(model5)["dem"]
+beta_se_econ  <- sqrt(diag(vcovHC(model5, type = "HC3")))[2]
+
+cat("With education + economic controls:\nBeta_hat =", round(beta_hat_econ, 3),
+    "| SE =", round(beta_se_econ, 3), "\n")
+
+#compute changes
+beta_change <- beta_hat_econ - beta_hat_edu
+percent_change <- 100 * beta_change / beta_hat_edu
+
+if (beta_change < 0) {
+  cat("\n\nInterpretation:\n\n",
+      "After adding ginv and tradewb, the democracy coefficient Beta_hat decreased.\n",
+      "This indicates that the positive association between democracy and income was partly explained\n",
+      "by higher investment and trade levels typical of democratic countries.\n",
+      "Therefore, the Beta_hat from part 4 was **upward biased** — omitting ginv and tradewb made democracy appear\n",
+      "to have a stronger effect on GDP per capita than it truly does once those factors are controlled for.\n")
+} else if (beta_change > 0) {
+  cat("\n\nInterpretation:\n\n",
+      "After adding ginv and tradewb, the democracy coefficient Beta_hat 
+increase. This suggests that trade and investment were negatively correlated 
+with democracy or positively correlated with GDP in a way that suppressed 
+democracy’s apparent effect. Thus, the Beta_hat from part 4 was downward biased.
+Omitting ginv and tradewb understated democracy’s association with GDP per 
+capita.\n")}
+
+```
+
+
+
+
+
+6. 
+Using the estimates from part 5, can we reject the null hypothesis that the two
+control variables related to the economy are irrelevant in predicting GDP per 
+capita (i.e., thecoefficients on both tradewb and ginv are zero)?
+```{r}
+#install.packages("car")
+library(car)
+
+# Perform robust Wald test (heteroskedasticity-robust F-test)
+joint_test <- linearHypothesis(model5, 
+                               c("ginv = 0", "tradewb = 0"), 
+                               vcov = vcovHC(model5, type = "HC3"))
+
+joint_test
+
+# --- Interpretation block ---
+p_value <- joint_test[2, "Pr(>F)"]
+
+if (p_value < 0.05) {
+  cat("\nResult:\n\n",
+      "We REJECT the null hypothesis (p-value =", round(p_value, 4), "). This 
+means ginv and tradewb are jointly significant predictors of 
+log(GDP per capita). Economic factors like investment and trade openness help 
+explain cross-country differences in income levels.\n")
+} else {
+  cat("\nResult:\n",
+      "We FAIL TO REJECT the null hypothesis (p-value =", round(p_value, 4), ").\n",
+      "This means there is no statistical evidence at the 5% level that ginv and tradewb are jointly relevant.\n",
+      "Adding them does not significantly improve the model’s ability to predict GDP per capita.\n")
+}
+```
 

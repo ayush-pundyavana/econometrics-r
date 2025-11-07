@@ -1,0 +1,1150 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{fancyvrb}
+\usepackage{fvextra}
+\fvset{breaklines=true, breakanywhere=true, fontsize=\small, frame=single}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Problem Set 4},
+  pdfauthor={Ayush Pundyavana},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Problem Set 4}
+\author{Ayush Pundyavana}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knitr}\SpecialCharTok{::}\NormalTok{opts\_chunk}\SpecialCharTok{$}\FunctionTok{set}\NormalTok{(}
+\AttributeTok{echo =} \ConstantTok{TRUE}\NormalTok{,}
+\AttributeTok{results =} \StringTok{\textquotesingle{}markup\textquotesingle{}}\NormalTok{,}
+\AttributeTok{tidy =} \ConstantTok{TRUE}\NormalTok{,}
+\AttributeTok{comment =} \ConstantTok{NA}\NormalTok{,}
+\AttributeTok{width =} \DecValTok{60}\NormalTok{, }\CommentTok{\# wrap R output lines}
+\AttributeTok{max.print =} \DecValTok{100} \CommentTok{\# limit huge outputs}
+\NormalTok{)}
+\FunctionTok{options}\NormalTok{(}\AttributeTok{width =} \DecValTok{60}\NormalTok{) }\CommentTok{\# ensures printed output wraps too}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: package 'dplyr' was built under R version 4.4.3
+\end{verbatim}
+
+\begin{verbatim}
+
+Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+The following objects are masked from 'package:stats':
+
+    filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: package 'ggplot2' was built under R version 4.4.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(sandwich)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: package 'sandwich' was built under R version 4.4.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(lmtest)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: package 'lmtest' was built under R version 4.4.3
+\end{verbatim}
+
+\begin{verbatim}
+Loading required package: zoo
+\end{verbatim}
+
+\begin{verbatim}
+Warning: package 'zoo' was built under R version 4.4.3
+\end{verbatim}
+
+\begin{verbatim}
+
+Attaching package: 'zoo'
+\end{verbatim}
+
+\begin{verbatim}
+The following objects are masked from 'package:base':
+
+    as.Date, as.Date.numeric
+\end{verbatim}
+
+\#Question 1
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data1}\FloatTok{.1} \OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"grades\_and\_temps.csv"}\NormalTok{)}
+
+\NormalTok{data1}\FloatTok{.2} \OtherTok{\textless{}{-}}\NormalTok{ data1}\FloatTok{.1} \SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{gdppc1k =} \FunctionTok{round}\NormalTok{(gdppc}\SpecialCharTok{/}\DecValTok{1000}\NormalTok{, }\DecValTok{3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Generate a scatter plot with GDP per capita in thousands of dollars
+  (gdppc1k) on the x-axisand the average math score (math score) on the
+  y-axis. Using visual inspection, do these variables seem to be
+  positively correlated, negatively correlated, or not correlated at
+  all? Does their relationship seem linear or non-linear?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\AttributeTok{x =}\NormalTok{ data1}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{gdppc1k, }\AttributeTok{y =}\NormalTok{ data1}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{math\_score,}
+     \AttributeTok{main =} \StringTok{"Math Score based on GDP Per Capita "}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"GDP Per Capita"}\NormalTok{,}
+     \AttributeTok{ylab =} \StringTok{"Math Score"}\NormalTok{,}
+     \AttributeTok{col =} \StringTok{"purple"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{problem_set_4_files/figure-latex/unnamed-chunk-4-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Using visual inspection of the scatterplot, the relationship between GDP}
+\StringTok{    Per Capita and Math Score seems non{-}linear since the rate of change in the}
+\StringTok{    Math score as GDP Per Capita increases seems to be non{-}constant."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Using visual inspection of the scatterplot, the relationship between GDP
+    Per Capita and Math Score seems non-linear since the rate of change in the
+    Math score as GDP Per Capita increases seems to be non-constant.
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Estimate the following two Equations:
+\end{enumerate}
+
+math scorei = a + b gdppc1ki + ei (1) math scorei = α + β1 gdppc1ki + β2
+gdppc1k2i + εi (2)
+
+Report the estimated coefficients ˆb, ˆβ1 and ˆβ2, along with their
+heteroskedasticity-robust standard errors for each equation. Determine
+whether the relationship between math scores and GDP per capita is
+linear (as opposed to quadratic).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Linear model}
+\NormalTok{lin\_model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(math\_score }\SpecialCharTok{\textasciitilde{}}\NormalTok{ gdppc1k, }\AttributeTok{data =}\NormalTok{ data1}\FloatTok{.2}\NormalTok{)}
+\NormalTok{vcov\_m\_g }\OtherTok{\textless{}{-}} \FunctionTok{vcovHC}\NormalTok{(lin\_model, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)}
+\FunctionTok{coeftest}\NormalTok{(lin\_model, }\AttributeTok{vcov. =}\NormalTok{ vcov\_m\_g)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+t test of coefficients:
+
+            Estimate Std. Error t value  Pr(>|t|)    
+(Intercept) 432.9164     4.9696 87.1136 < 2.2e-16 ***
+gdppc1k       1.4004     0.1621  8.6394 6.201e-16 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{b\_hat }\OtherTok{\textless{}{-}}\NormalTok{ lin\_model}\SpecialCharTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{]}
+\NormalTok{b\_hat\_SE }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(vcov\_m\_g))[}\DecValTok{2}\NormalTok{]}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"b\_hat:"}\NormalTok{, b\_hat, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{b\_hat SE:"}\NormalTok{, b\_hat\_SE)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+b_hat: 1.400427 
+b_hat SE: 0.1620984
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Quadratic model}
+\NormalTok{quad\_model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(math\_score }\SpecialCharTok{\textasciitilde{}}\NormalTok{ gdppc1k }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(gdppc1k}\SpecialCharTok{*}\NormalTok{gdppc1k), }\AttributeTok{data =}\NormalTok{ data1}\FloatTok{.2}\NormalTok{)}
+\NormalTok{vcov\_m\_g\_g2 }\OtherTok{\textless{}{-}} \FunctionTok{vcovHC}\NormalTok{(quad\_model, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)}
+\FunctionTok{coeftest}\NormalTok{(quad\_model, }\AttributeTok{vcov. =}\NormalTok{ vcov\_m\_g\_g2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+t test of coefficients:
+
+                        Estimate  Std. Error t value
+(Intercept)          412.0714864   5.8861464 70.0070
+gdppc1k                3.4619840   0.4068620  8.5090
+I(gdppc1k * gdppc1k)  -0.0270478   0.0058909 -4.5915
+                      Pr(>|t|)    
+(Intercept)          < 2.2e-16 ***
+gdppc1k              1.517e-15 ***
+I(gdppc1k * gdppc1k) 6.917e-06 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{beta1\_hat }\OtherTok{\textless{}{-}}\NormalTok{ lin\_model}\SpecialCharTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{]}
+\NormalTok{beta1\_hat\_SE }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(vcov\_m\_g))[}\DecValTok{2}\NormalTok{]}
+
+\NormalTok{beta2\_hat }\OtherTok{\textless{}{-}}\NormalTok{ lin\_model}\SpecialCharTok{$}\NormalTok{coefficients[}\DecValTok{3}\NormalTok{]}
+\NormalTok{beta2\_hat\_SE }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(vcov\_m\_g))[}\DecValTok{3}\NormalTok{]}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"beta1\_hat:"}\NormalTok{, beta1\_hat, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{beta1\_hat SE:"}\NormalTok{, beta1\_hat\_SE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{beta2hat:"}\NormalTok{, beta2\_hat, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{beta2\_hat SE:"}\NormalTok{, beta2\_hat\_SE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+beta1_hat: 1.400427 
+beta1_hat SE: 0.1620984 
+
+beta2hat: NA 
+beta2_hat SE: NA 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"The relationship between math scores and GDP per capita is non{-}linear }
+\StringTok{because beta2hat is statistically signficant"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+The relationship between math scores and GDP per capita is non-linear 
+because beta2hat is statistically signficant
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Using your estimated coefficients from Equation (2) above, what is the
+  expected value of the difference in math scores between a country with
+  a GDP per capita of \$5,000 and a country with a GDP per capita of
+  \$10,000?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pred\_5k }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(quad\_model)[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+} \FunctionTok{coef}\NormalTok{(quad\_model)[}\DecValTok{2}\NormalTok{]}\SpecialCharTok{*}\DecValTok{5} \SpecialCharTok{+} \FunctionTok{coef}\NormalTok{(quad\_model)[}\DecValTok{3}\NormalTok{]}\SpecialCharTok{*}\DecValTok{5}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{pred\_10k }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(quad\_model)[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+} \FunctionTok{coef}\NormalTok{(quad\_model)[}\DecValTok{2}\NormalTok{]}\SpecialCharTok{*}\DecValTok{10} \SpecialCharTok{+} \FunctionTok{coef}\NormalTok{(quad\_model)[}\DecValTok{3}\NormalTok{]}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{diff\_pred }\OtherTok{\textless{}{-}}\NormalTok{ pred\_10k }\SpecialCharTok{{-}}\NormalTok{ pred\_5k}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Expected difference in math scores (10k vs 5k GDP per capita):"}\NormalTok{,}
+    \FunctionTok{round}\NormalTok{(diff\_pred, }\DecValTok{3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Expected difference in math scores (10k vs 5k GDP per capita): 15.281
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Generate a scatter plot with the math score on the y-axis and the
+  (natural) logarithm of the GDP per capita (in thousands of dollars) on
+  the x-axis. Based on visual inspection, is the relationship between
+  these two transformed variables linear? Do you think that a linear-
+  log specification will be able to better explain the relationship
+  between these two variables compared to the variables in part 1?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data1}\FloatTok{.3} \OtherTok{\textless{}{-}}\NormalTok{ data1}\FloatTok{.2} \SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{log\_gdppc1k =} \FunctionTok{log}\NormalTok{(gdppc1k))}
+
+\FunctionTok{plot}\NormalTok{(data1}\FloatTok{.3}\SpecialCharTok{$}\NormalTok{log\_gdppc1k, data1}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{math\_score,}
+     \AttributeTok{main =} \StringTok{"Math Score vs. log(GDP per capita)"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"log(GDP per capita in $1000s)"}\NormalTok{,}
+     \AttributeTok{ylab =} \StringTok{"Math Score"}\NormalTok{,}
+     \AttributeTok{col =} \StringTok{"darkgreen"}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{problem_set_4_files/figure-latex/unnamed-chunk-8-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Visual inspection shows a LINEAR relatinship after taking logs, indicating }
+\StringTok{that the linear{-}log model might fit better than the raw{-}level model."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Visual inspection shows a LINEAR relatinship after taking logs, indicating 
+that the linear-log model might fit better than the raw-level model.
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Estimate the following two regression equations:
+\end{enumerate}
+
+math scorei = θ1 + θ2 ln(gdppc1ki) + ui ln(math scorei) = γ1 + γ2
+ln(gdppc1ki) + νi
+
+Report the estimated intercept, slope, and their respective
+heteroskedasticity-robust standard errors for each equation. How do you
+interpret the intercept and the slope in each equation?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Linear{-}log model}
+\NormalTok{linlog\_model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(math\_score }\SpecialCharTok{\textasciitilde{}}\NormalTok{ log\_gdppc1k, }\AttributeTok{data =}\NormalTok{ data1}\FloatTok{.3}\NormalTok{)}
+\NormalTok{vcov\_li }\OtherTok{\textless{}{-}} \FunctionTok{vcovHC}\NormalTok{(linlog\_model, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)}
+\FunctionTok{coeftest}\NormalTok{(linlog\_model, }\AttributeTok{vcov. =}\NormalTok{ vcov\_li)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+t test of coefficients:
+
+            Estimate Std. Error t value  Pr(>|t|)    
+(Intercept) 374.3795     7.5512  49.579 < 2.2e-16 ***
+log_gdppc1k  34.7885     2.5307  13.747 < 2.2e-16 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Extract individual values}
+\NormalTok{theta1\_hat  }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(linlog\_model)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{theta2\_hat  }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(linlog\_model)[}\DecValTok{2}\NormalTok{]}
+\NormalTok{theta1\_se   }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(}\FunctionTok{vcovHC}\NormalTok{(linlog\_model, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)))[}\DecValTok{1}\NormalTok{]}
+\NormalTok{theta2\_se   }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(}\FunctionTok{vcovHC}\NormalTok{(linlog\_model, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)))[}\DecValTok{2}\NormalTok{]}
+
+\CommentTok{\#Report values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"theta1hat (Intercept):"}\NormalTok{, theta1\_hat,}
+\StringTok{"  theta1hatSE:"}\NormalTok{, theta1\_se,}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+theta1hat (Intercept): 374.3795   theta1hatSE: 7.55121 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"theta2hat (Coefficient):"}\NormalTok{, theta2\_hat,}
+\StringTok{"  theta2hatSE:"}\NormalTok{, theta2\_se,}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+theta2hat (Coefficient): 34.78846   theta2hatSE: 2.530665 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Log{-}log model}
+\NormalTok{data1}\FloatTok{.4} \OtherTok{\textless{}{-}}\NormalTok{ data1}\FloatTok{.3} \SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{log\_math =} \FunctionTok{log}\NormalTok{(math\_score))}
+\NormalTok{loglog\_model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(log\_math }\SpecialCharTok{\textasciitilde{}}\NormalTok{ log\_gdppc1k, }\AttributeTok{data =}\NormalTok{ data1}\FloatTok{.4}\NormalTok{)}
+\FunctionTok{coeftest}\NormalTok{(loglog\_model, }\AttributeTok{vcov =} \FunctionTok{vcovHC}\NormalTok{(loglog\_model, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+t test of coefficients:
+
+             Estimate Std. Error t value  Pr(>|t|)    
+(Intercept) 5.9291352  0.0178519  332.13 < 2.2e-16 ***
+log_gdppc1k 0.0785827  0.0059399   13.23 < 2.2e-16 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Extract individual values neatly}
+\NormalTok{gamma1\_hat  }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(loglog\_model)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{gamma2\_hat  }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(loglog\_model)[}\DecValTok{2}\NormalTok{]}
+\NormalTok{gamma1\_se   }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(}\FunctionTok{vcovHC}\NormalTok{(loglog\_model, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)))[}\DecValTok{1}\NormalTok{]}
+\NormalTok{gamma2\_se   }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(}\FunctionTok{vcovHC}\NormalTok{(loglog\_model, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)))[}\DecValTok{2}\NormalTok{]}
+
+\CommentTok{\#Report values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"gamma1hat (Intercept):"}\NormalTok{, gamma1\_hat,}
+\StringTok{"  gamma1hatSE:"}\NormalTok{, gamma1\_se,}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+gamma1hat (Intercept): 5.929135   gamma1hatSE: 0.01785189 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"gamma2hat (Coefficient):"}\NormalTok{, gamma2\_hat,}
+\StringTok{"  gamma2hatSE:"}\NormalTok{, gamma2\_se,}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+gamma2hat (Coefficient): 0.07858271   gamma2hatSE: 0.00593991 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Linear{-}log model Interpretations:}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Linear-log model Interpretations:
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"In the linear{-}log model, the slope (beta2hat) represents the change in }
+\StringTok{math score for a 1\% change in GDP per capita.}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+In the linear-log model, the slope (beta2hat) represents the change in 
+math score for a 1% change in GDP per capita.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"In the log{-}log model, the slope (gamma2hat) (elasticity) shows the \% change }
+\StringTok{in math score for a 1\% change in GDP per capita."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+In the log-log model, the slope (gamma2hat) (elasticity) shows the % change 
+in math score for a 1% change in GDP per capita.
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Use the R-squared to determine which specification between the
+  following pairs better explains the relationship between math scores
+  and GDP per capita:
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Quadratic vs Linear-log, b) Linear-log vs Log-log. Explain.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Obtaining R\^{}2 values}
+\NormalTok{R2\_lin }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(lin\_model)}\SpecialCharTok{$}\NormalTok{r.squared}
+\NormalTok{R2\_quad }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(quad\_model)}\SpecialCharTok{$}\NormalTok{r.squared}
+\NormalTok{R2\_linlog }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(linlog\_model)}\SpecialCharTok{$}\NormalTok{r.squared}
+\NormalTok{R2\_loglog }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(loglog\_model)}\SpecialCharTok{$}\NormalTok{r.squared}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R\_squared Linear:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(R2\_lin, }\DecValTok{3}\NormalTok{),}
+\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{R\_squared Quadratic:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(R2\_quad, }\DecValTok{3}\NormalTok{),}
+\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{R\_squared Linear{-}log:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(R2\_linlog, }\DecValTok{3}\NormalTok{),}
+\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{R\_squared Log{-}log:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(R2\_loglog, }\DecValTok{3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+R_squared Linear: 0.292 
+R_squared Quadratic: 0.415 
+R_squared Linear-log: 0.493 
+R_squared Log-log: 0.492
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{(a) Quadratic vs Linear{-}log: The model with higher R² explains more variance,}
+\StringTok{but since they use different transformations, direct comparison must be cautious.}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+
+(a) Quadratic vs Linear-log: The model with higher R² explains more variance,
+but since they use different transformations, direct comparison must be cautious.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"(b) Linear{-}log vs Log{-}log: Both have the same dependent variable transformation,}
+\StringTok{so the higher R² model better fits the data."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+(b) Linear-log vs Log-log: Both have the same dependent variable transformation,
+so the higher R² model better fits the data.
+\end{verbatim}
+
+\subsection{Question 2}\label{question-2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data2}\FloatTok{.1} \OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"DDCG\_dataset.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For the sample of countries with available data in 2005, compute the
+  mean GDP per capita for those that have a democracy (demo = 1). Do the
+  same for the sample of countries that do not have a democracy in 2005
+  (demo = 0). What is the difference? Can you reject the null hypothesis
+  that the two means are equal at the 5\% significance level (no
+  regressions needed for this part)? Estimate a regression of GDP per
+  capita on the democracy dummy, also restricted to year 2005. How do
+  the estimated intercept and slope compare to your previous
+  calculations?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Restrict to 2005}
+\NormalTok{data2\_2005 }\OtherTok{\textless{}{-}}\NormalTok{ data2}\FloatTok{.1} \SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(year }\SpecialCharTok{==} \DecValTok{2005}\NormalTok{)}
+
+\CommentTok{\#Get group means}
+\NormalTok{means }\OtherTok{\textless{}{-}}\NormalTok{ data2\_2005 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(dem) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean\_gdp =} \FunctionTok{mean}\NormalTok{(gdp\_capita, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))}
+
+\NormalTok{means}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 2 x 2
+    dem mean_gdp
+  <int>    <dbl>
+1     0    4223.
+2     1    9675.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Difference in means}
+\NormalTok{diff\_means }\OtherTok{\textless{}{-}}\NormalTok{ means}\SpecialCharTok{$}\NormalTok{mean\_gdp[means}\SpecialCharTok{$}\NormalTok{dem }\SpecialCharTok{==} \DecValTok{1}\NormalTok{] }\SpecialCharTok{{-}}\NormalTok{ means}\SpecialCharTok{$}\NormalTok{mean\_gdp[means}\SpecialCharTok{$}\NormalTok{dem }\SpecialCharTok{==} \DecValTok{0}\NormalTok{]}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Difference in mean GDP per capita (democracy {-} non{-}democracy):"}\NormalTok{, }\FunctionTok{round}\NormalTok{(diff\_means, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Difference in mean GDP per capita (democracy - non-democracy): 5452.018 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Two{-}sample t{-}test (unequal variances)}
+\NormalTok{t\_test }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(gdp\_capita }\SpecialCharTok{\textasciitilde{}}\NormalTok{ dem, }\AttributeTok{data =}\NormalTok{ data2\_2005, }\AttributeTok{var.equal =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{t\_test}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Welch Two Sample t-test
+
+data:  gdp_capita by dem
+t = -3.1665, df = 120.04, p-value = 0.001956
+alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+95 percent confidence interval:
+ -8860.969 -2043.067
+sample estimates:
+mean in group 0 mean in group 1 
+       4222.954        9674.972 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p\_val }\OtherTok{\textless{}{-}}\NormalTok{ t\_test}\SpecialCharTok{$}\NormalTok{p.value}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Interpretation: We reject the null hypothesis that mean GDP per capita is}
+\StringTok{equal across statuses since  p{-}value("}\NormalTok{, }\FunctionTok{round}\NormalTok{(p\_val, }\DecValTok{3}\NormalTok{), }\StringTok{") is less than alpha("}\NormalTok{, }\FloatTok{0.05}\NormalTok{, }\StringTok{")}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Interpretation: We reject the null hypothesis that mean GDP per capita is
+equal across statuses since  p-value( 0.002 ) is less than alpha( 0.05 )
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{reg\_2005 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(gdp\_capita }\SpecialCharTok{\textasciitilde{}}\NormalTok{ dem, }\AttributeTok{data =}\NormalTok{ data2\_2005)}
+\FunctionTok{coeftest}\NormalTok{(reg\_2005, }\AttributeTok{vcov =} \FunctionTok{vcovHC}\NormalTok{(reg\_2005, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+t test of coefficients:
+
+            Estimate Std. Error t value  Pr(>|t|)    
+(Intercept)   4223.0     1188.2  3.5540 0.0005271 ***
+dem           5452.0     1736.3  3.1399 0.0020856 ** 
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Intercept (alpha) should equal mean(GDP | dem=0):"}\NormalTok{, }
+    \FunctionTok{round}\NormalTok{(means}\SpecialCharTok{$}\NormalTok{mean\_gdp[means}\SpecialCharTok{$}\NormalTok{dem }\SpecialCharTok{==} \DecValTok{0}\NormalTok{], }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Intercept (alpha) should equal mean(GDP | dem=0): 4222.954 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Slope (Beta\_hat) should equal difference in means:"}\NormalTok{, }
+    \FunctionTok{round}\NormalTok{(means}\SpecialCharTok{$}\NormalTok{mean\_gdp[means}\SpecialCharTok{$}\NormalTok{dem }\SpecialCharTok{==} \DecValTok{1}\NormalTok{] }\SpecialCharTok{{-}}\NormalTok{ means}\SpecialCharTok{$}\NormalTok{mean\_gdp[means}\SpecialCharTok{$}\NormalTok{dem }\SpecialCharTok{==} \DecValTok{0}\NormalTok{], }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Slope (Beta_hat) should equal difference in means: 5452.018 
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Throughout the rest of this question, we are going to focus on
+  studying the rela- tionship between the natural logarithm of GDP per
+  capita and the democracy dummy:
+\end{enumerate}
+
+log(gdp capita) = α + βdem + ε
+
+Estimate the equation above. Report the estimated coefficients ˆα and
+ˆβ, along with their corresponding heteroskedasticity-robust standard
+errors. Interpret ˆβ. Is β statistically different from zero at the 5\%
+significance level (report t-statistic and p-value)?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Add log of GDP per capita}
+\NormalTok{data2}\FloatTok{.2} \OtherTok{\textless{}{-}}\NormalTok{ data2}\FloatTok{.1} \SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{log\_gdp =} \FunctionTok{log}\NormalTok{(gdp\_capita))}
+
+\NormalTok{model3 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(log\_gdp }\SpecialCharTok{\textasciitilde{}}\NormalTok{ dem, }\AttributeTok{data =}\NormalTok{ data2}\FloatTok{.2}\NormalTok{)}
+\NormalTok{vcov }\OtherTok{\textless{}{-}} \FunctionTok{vcovHC}\NormalTok{(model3, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)}
+\FunctionTok{coeftest}\NormalTok{(model3, }\AttributeTok{vcov. =}\NormalTok{ vcov)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+t test of coefficients:
+
+            Estimate Std. Error t value  Pr(>|t|)    
+(Intercept)  7.10971    0.12621 56.3312 < 2.2e-16 ***
+dem          1.06652    0.16046  6.6468 1.033e-10 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extract estimates}
+\NormalTok{alpha\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(model3)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{beta\_hat  }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(model3)[}\DecValTok{2}\NormalTok{]}
+\NormalTok{se\_alpha  }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(}\FunctionTok{vcovHC}\NormalTok{(model3, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)))[}\DecValTok{1}\NormalTok{]}
+\NormalTok{se\_beta   }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(}\FunctionTok{vcovHC}\NormalTok{(model3, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)))[}\DecValTok{2}\NormalTok{]}
+
+\NormalTok{t\_beta }\OtherTok{\textless{}{-}}\NormalTok{ beta\_hat }\SpecialCharTok{/}\NormalTok{ se\_beta}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"alpha\_hat ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(alpha\_hat, }\DecValTok{3}\NormalTok{), }\StringTok{" (SE ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(se\_alpha, }\DecValTok{3}\NormalTok{), }\StringTok{")}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+\StringTok{"Beta\_hat ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(beta\_hat, }\DecValTok{3}\NormalTok{), }\StringTok{" (SE ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(se\_beta, }\DecValTok{3}\NormalTok{), }\StringTok{", t ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(t\_beta, }\DecValTok{3}\NormalTok{), }\StringTok{")}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+alpha_hat = 7.11  (SE = 0.126 )
+ Beta_hat = 1.067  (SE = 0.16 , t = 6.647 )
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Interpretation: Beta\_hat represents the percentage difference in GDP per capita}
+\StringTok{between democracies and non{-}democracies. If Beta\_hat is statistically significant}
+\StringTok{(|t| \textgreater{} 2), democracies have higher average log(GDP per capita)."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Interpretation: Beta_hat represents the percentage difference in GDP per capita
+between democracies and non-democracies. If Beta_hat is statistically significant
+(|t| > 2), democracies have higher average log(GDP per capita).
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Do you think that the equation above can suffer from omitted variable
+  bias (OVB)? List two omitted variables that can potentially lead to
+  OVB when estimating Equation (5). For each of them, argue whether the
+  estimate ˆβ is upward or downward biased (i.e., would ˆβ go down or
+  up, if we included the omitted variable)?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Possible ommitted variables are education levels (more educated populations}
+\StringTok{{-}{-}\textgreater{} higher GDP and higher likelihood of democracy), trade openness (trade boosts}
+\StringTok{income and correlates with democratic institutions)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Possible ommitted variables are education levels (more educated populations
+--> higher GDP and higher likelihood of democracy), trade openness (trade boosts
+income and correlates with democratic institutions)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{If these are ommitted, and both correlate positively with democracy and }
+\StringTok{GDP, then beta1hat is upward biased, meaning the democracy effect appears }
+\StringTok{larger than it really is."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+
+If these are ommitted, and both correlate positively with democracy and 
+GDP, then beta1hat is upward biased, meaning the democracy effect appears 
+larger than it really is.
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model4 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(log\_gdp }\SpecialCharTok{\textasciitilde{}}\NormalTok{ dem }\SpecialCharTok{+}\NormalTok{ lp\_bl }\SpecialCharTok{+}\NormalTok{ lh\_bl, }\AttributeTok{data =}\NormalTok{ data2}\FloatTok{.2}\NormalTok{)}
+\FunctionTok{coeftest}\NormalTok{(model4, }\AttributeTok{vcov =} \FunctionTok{vcovHC}\NormalTok{(model4, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+t test of coefficients:
+
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 6.1858112  0.1833171 33.7438  < 2e-16 ***
+dem         0.3822453  0.1651491  2.3145  0.02117 *  
+lp_bl       0.0082106  0.0037405  2.1951  0.02876 *  
+lh_bl       0.0942623  0.0102318  9.2127  < 2e-16 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extract Beta\_hat and SE}
+\NormalTok{beta\_hat\_edu }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(model4)[}\StringTok{"dem"}\NormalTok{]}
+\NormalTok{beta\_se\_edu  }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(}\FunctionTok{vcovHC}\NormalTok{(model4, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)))[}\DecValTok{2}\NormalTok{]}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"With education controls:}\SpecialCharTok{\textbackslash{}n}\StringTok{Beta\_hat ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(beta\_hat\_edu, }\DecValTok{3}\NormalTok{),}
+    \StringTok{"| SE ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(beta\_se\_edu, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+With education controls:
+Beta_hat = 0.382 | SE = 0.165 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{If Beta\_hat decreases after adding education controls, the earlier model }
+\StringTok{likely overstated democracy\textquotesingle{}s effect, meaning the initial estimate was upward }
+\StringTok{biased."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+If Beta_hat decreases after adding education controls, the earlier model 
+likely overstated democracy's effect, meaning the initial estimate was upward 
+biased.
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  On top of lp bl and lh bl, also add ginv and tradewb as control
+  variables in Equation (5). How does ˆβ change (report the standard
+  error as well)? Provide an intuitive explanation. Does this change
+  mean that the ˆβ was upward or downward biased in part 4?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model5 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(log\_gdp }\SpecialCharTok{\textasciitilde{}}\NormalTok{ dem }\SpecialCharTok{+}\NormalTok{ lp\_bl }\SpecialCharTok{+}\NormalTok{ lh\_bl }\SpecialCharTok{+}\NormalTok{ ginv }\SpecialCharTok{+}\NormalTok{ tradewb, }\AttributeTok{data =}\NormalTok{ data2}\FloatTok{.2}\NormalTok{)}
+\FunctionTok{coeftest}\NormalTok{(model5, }\AttributeTok{vcov =} \FunctionTok{vcovHC}\NormalTok{(model5, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+t test of coefficients:
+
+               Estimate  Std. Error t value  Pr(>|t|)    
+(Intercept)  5.73386870  0.28315581 20.2499 < 2.2e-16 ***
+dem          0.43158752  0.15213068  2.8370  0.004799 ** 
+lp_bl        0.00806050  0.00375963  2.1440  0.032672 *  
+lh_bl        0.09224219  0.00954171  9.6673 < 2.2e-16 ***
+ginv        -0.00753655  0.00877757 -0.8586  0.391096    
+tradewb      0.00711982  0.00099077  7.1862 3.566e-12 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extract updated Beta\_hat and SE}
+\NormalTok{beta\_hat\_econ }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(model5)[}\StringTok{"dem"}\NormalTok{]}
+\NormalTok{beta\_se\_econ  }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(}\FunctionTok{vcovHC}\NormalTok{(model5, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{)))[}\DecValTok{2}\NormalTok{]}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"With education + economic controls:}\SpecialCharTok{\textbackslash{}n}\StringTok{Beta\_hat ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(beta\_hat\_econ, }\DecValTok{3}\NormalTok{),}
+    \StringTok{"| SE ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(beta\_se\_econ, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+With education + economic controls:
+Beta_hat = 0.432 | SE = 0.152 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#compute changes}
+\NormalTok{beta\_change }\OtherTok{\textless{}{-}}\NormalTok{ beta\_hat\_econ }\SpecialCharTok{{-}}\NormalTok{ beta\_hat\_edu}
+\NormalTok{percent\_change }\OtherTok{\textless{}{-}} \DecValTok{100} \SpecialCharTok{*}\NormalTok{ beta\_change }\SpecialCharTok{/}\NormalTok{ beta\_hat\_edu}
+
+\ControlFlowTok{if}\NormalTok{ (beta\_change }\SpecialCharTok{\textless{}} \DecValTok{0}\NormalTok{) \{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{Interpretation:}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"After adding ginv and tradewb, the democracy coefficient Beta\_hat decreased.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"This indicates that the positive association between democracy and income was partly explained}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"by higher investment and trade levels typical of democratic countries.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"Therefore, the Beta\_hat from part 4 was **upward biased** — omitting ginv and tradewb made democracy appear}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"to have a stronger effect on GDP per capita than it truly does once those factors are controlled for.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (beta\_change }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) \{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{Interpretation:}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"After adding ginv and tradewb, the democracy coefficient Beta\_hat }
+\StringTok{increase. This suggests that trade and investment were negatively correlated }
+\StringTok{with democracy or positively correlated with GDP in a way that suppressed }
+\StringTok{democracy’s apparent effect. Thus, the Beta\_hat from part 4 was downward biased.}
+\StringTok{Omitting ginv and tradewb understated democracy’s association with GDP per }
+\StringTok{capita.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+
+Interpretation:
+
+ After adding ginv and tradewb, the democracy coefficient Beta_hat 
+increase. This suggests that trade and investment were negatively correlated 
+with democracy or positively correlated with GDP in a way that suppressed 
+democracy’s apparent effect. Thus, the Beta_hat from part 4 was downward biased.
+Omitting ginv and tradewb understated democracy’s association with GDP per 
+capita.
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Using the estimates from part 5, can we reject the null hypothesis
+  that the two control variables related to the economy are irrelevant
+  in predicting GDP per capita (i.e., thecoefficients on both tradewb
+  and ginv are zero)?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#install.packages("car")}
+\FunctionTok{library}\NormalTok{(car)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: package 'car' was built under R version 4.4.3
+\end{verbatim}
+
+\begin{verbatim}
+Loading required package: carData
+\end{verbatim}
+
+\begin{verbatim}
+Warning: package 'carData' was built under R version 4.4.3
+\end{verbatim}
+
+\begin{verbatim}
+
+Attaching package: 'car'
+\end{verbatim}
+
+\begin{verbatim}
+The following object is masked from 'package:dplyr':
+
+    recode
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Perform robust Wald test (heteroskedasticity{-}robust F{-}test)}
+\NormalTok{joint\_test }\OtherTok{\textless{}{-}} \FunctionTok{linearHypothesis}\NormalTok{(model5, }
+                               \FunctionTok{c}\NormalTok{(}\StringTok{"ginv = 0"}\NormalTok{, }\StringTok{"tradewb = 0"}\NormalTok{), }
+                               \AttributeTok{vcov =} \FunctionTok{vcovHC}\NormalTok{(model5, }\AttributeTok{type =} \StringTok{"HC3"}\NormalTok{))}
+
+\NormalTok{joint\_test}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Linear hypothesis test:
+ginv = 0
+tradewb = 0
+
+Model 1: restricted model
+Model 2: log_gdp ~ dem + lp_bl + lh_bl + ginv + tradewb
+
+Note: Coefficient covariance matrix supplied.
+
+  Res.Df Df      F    Pr(>F)    
+1    381                        
+2    379  2 25.821 3.069e-11 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-}{-} Interpretation block {-}{-}{-}}
+\NormalTok{p\_value }\OtherTok{\textless{}{-}}\NormalTok{ joint\_test[}\DecValTok{2}\NormalTok{, }\StringTok{"Pr(\textgreater{}F)"}\NormalTok{]}
+
+\ControlFlowTok{if}\NormalTok{ (p\_value }\SpecialCharTok{\textless{}} \FloatTok{0.05}\NormalTok{) \{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Result:}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"We REJECT the null hypothesis (p{-}value ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(p\_value, }\DecValTok{4}\NormalTok{), }\StringTok{"). This }
+\StringTok{means ginv and tradewb are jointly significant predictors of }
+\StringTok{log(GDP per capita). Economic factors like investment and trade openness help }
+\StringTok{explain cross{-}country differences in income levels.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Result:}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"We FAIL TO REJECT the null hypothesis (p{-}value ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(p\_value, }\DecValTok{4}\NormalTok{), }\StringTok{").}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"This means there is no statistical evidence at the 5\% level that ginv and tradewb are jointly relevant.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"Adding them does not significantly improve the model’s ability to predict GDP per capita.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Result:
+
+ We REJECT the null hypothesis (p-value = 0 ). This 
+means ginv and tradewb are jointly significant predictors of 
+log(GDP per capita). Economic factors like investment and trade openness help 
+explain cross-country differences in income levels.
+\end{verbatim}
+
+\end{document}
